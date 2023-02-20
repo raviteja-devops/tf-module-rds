@@ -36,6 +36,7 @@ resource "aws_rds_cluster" "rds" {
   engine_version            = var.engine_version
   master_username           = data.aws_ssm_parameter.DB_ADMIN_USER.value
   master_password           = data.aws_ssm_parameter.DB_ADMIN_PASS.value
+  skip_final_snapshot       = true
   db_subnet_group_name      = aws_db_subnet_group.default.name
   vpc_security_group_ids    = [aws_security_group.rds.id]
   storage_encrypted         = true
