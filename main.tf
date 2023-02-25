@@ -46,3 +46,19 @@ resource "aws_rds_cluster" "rds" {
     { Name = "${var.env}-rds" }
   )
 }
+
+resource "aws_rds_cluster_instance" "cluster_instances" {
+  count              = var.number_of_instances
+  identifier         = "${var.env}-rds-${count.index + 1}"
+  cluster_identifier = aws_rds_cluster.rds.id
+  instance_class     = var.instance_class
+  engine             = aws_rds_cluster.rds.engine
+  engine_version     = aws_rds_cluster.rds.engine_version
+}
+
+
+resource "aws_ssm_parameter" "rds_endpoint" {
+  name  = "${var.env}.rds.ENDPOINT"
+  type  = "String"
+  value = aws_rds_cluster.rds.endpoint
+}
